@@ -5,4 +5,3 @@ maze = parser.get_maze()
 parser.info()
 
 maze.print_maze()
-

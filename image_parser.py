@@ -37,7 +37,7 @@ class ImageParser:
 
             data.append(row)
 
-        return Maze(data)
+        return Maze(self.im)
 
     def info(self):
         print("\n======== Image information ========= ")
