@@ -53,10 +53,18 @@ class Maze:
         self.xx = []
         self.yy = []
 
-        for y in range(0, self.height):
-            if self.maze[y] > 0:
-                self.xx.append(y)
-                self.yy.append(0)
+        topnodes = [None] * self.height
+        self.start = None
+        self.end = None
+        count = 0
+
+        # Start row
+        for x in range(1, self.width - 1):
+            if self.maze[x] > 0:
+                self.start = Maze.Node((x, 0))
+                topnodes[x] = self.start
+                count += 1
+                break
 
         for y in range(1, self.height - 1):
             rowoffset = y * self.width
@@ -67,11 +75,14 @@ class Maze:
             cur = False
             nxt = self.maze[rowoffset + 1] > 0
 
+            leftnode = None
+
             for x in range(1, self.width - 1):
                 prv = cur
                 cur = nxt
                 nxt = self.maze[rowoffset + x + 1] > 0
 
+                n = None
                 if not cur:
                     continue
 
@@ -80,26 +91,59 @@ class Maze:
                         # PATH PATH PATH
                         # om det finns något över / under
                         if self.maze[rowaboveoffset + x] > 0 or self.maze[rowbelowoffset + x] > 0:
+                            n = Maze.Node((x, y))
+                            leftnode.Neighbours[1] = n
+                            n.Neighbours[3] = leftnode
+                            leftnode = n
                             self.xx.append(x)
                             self.yy.append(y)
                     else:
                         pass
                         # PATH PATH WALL
+                        n = Maze.Node((x, y))
+                        leftnode.Neighbours[1] = n
+                        n.Neighbours[3] = leftnode
+                        leftnode = None
                         self.xx.append(x)
                         self.yy.append(y)
                 else:
                     if nxt:
                         # WALL PATH PATH
+                        n = Maze.Node((x, y))
+                        leftnode = n
                         self.xx.append(x)
                         self.yy.append(y)
                     else:
                         # WALL PATH WALL
                         if self.maze[rowaboveoffset + x] == 0 or self.maze[rowbelowoffset + x] == 0:
                             # Check above or below
+                            n = Maze.Node((x, y))
                             self.xx.append(x)
                             self.yy.append(y)
 
-        for y in range(self.height * self.width - self.height, self.height * self.width):
-            if self.maze[y] > 0:
-                self.xx.append(y % self.height)
-                self.yy.append(self.height - 1)
+                if n is not None:
+                    # Clear above, connect to waiting top node
+                    if self.maze[rowaboveoffset + x] > 0:
+                        t = topnodes[x]
+                        t.Neighbours[2] = n
+                        n.Neighbours[0] = t
+
+                    # If clear below, put this new node in the top row for the next connection
+                    if self.maze[rowbelowoffset + x] > 0:
+                        topnodes[x] = n
+                    else:
+                        topnodes[x] = None
+
+                    count += 1
+
+        rowoffset = (self.height - 1) * self.width
+        for x in range(1, self.width - 1):
+            if self.maze[rowoffset + x] > 0:
+                self.end = Maze.Node((x, self.height - 1))
+                t = topnodes[x]
+                t.Neighbours[2] = self.end
+                self.end.Neighbours[0] = t
+                count += 1
+                break
+
+        self.count = count
