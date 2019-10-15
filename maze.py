@@ -6,31 +6,31 @@ class Maze:
 
     def __init__(self, maze):
         self.maze = list(maze.getdata(0))
-        self.width = maze.size[0]
-        self.height = maze.size[1]
+        self.__width = maze.size[0]
+        self.__height = maze.size[1]
         self.__create_graph()
 
     # Public functions
     def print_maze(self):
         rows = 0
 
-        offset = (len(str(self.width)) - len(str(rows)) + 1)
+        offset = (len(str(self.__width)) - len(str(rows)) + 1)
         print(" " * (offset - 1), end='')
-        for i in range(0, self.width):
+        for i in range(0, self.__width):
             if i + 1 <= 10:
                 print("  " + str(i + 1), end='')
             else:
                 print(" " + str(i + 1), end='')
 
         for i in range(0, len(self.maze)):
-            if i % self.width == 0:
+            if i % self.__width == 0:
                 print()
                 rows += 1
-                print(str(rows), end=' ' * (len(str(self.width)) - len(str(rows)) + 1))
+                print(str(rows), end=' ' * (len(str(self.__width)) - len(str(rows)) + 1))
 
             is_node = False
             for j in range(0, len(self.yy)):
-                if self.yy[j] == rows - 1 and self.xx[j] == i % self.width:
+                if self.yy[j] == rows - 1 and self.xx[j] == i % self.__width:
                     print("x  ", end='')
                     is_node = True
 
@@ -40,11 +40,8 @@ class Maze:
                 else:
                     print("#  ", end='')
 
-    def get_height(self):
-        return self.height
-
-    def get_width(self):
-        return self.width
+    def size(self):
+        return self.__width
 
     # Private functions
     def __create_graph(self):
@@ -53,23 +50,23 @@ class Maze:
         self.xx = []
         self.yy = []
 
-        topnodes = [None] * self.height
+        topnodes = [None] * self.__width
         self.start = None
         self.end = None
         count = 0
 
         # Start row
-        for x in range(1, self.width - 1):
+        for x in range(1, self.__width - 1):
             if self.maze[x] > 0:
                 self.start = Maze.Node((x, 0))
                 topnodes[x] = self.start
                 count += 1
                 break
 
-        for y in range(1, self.height - 1):
-            rowoffset = y * self.width
-            rowaboveoffset = rowoffset - self.width
-            rowbelowoffset = rowoffset + self.width
+        for y in range(1, self.__width - 1):
+            rowoffset = y * self.__width
+            rowaboveoffset = rowoffset - self.__width
+            rowbelowoffset = rowoffset + self.__width
 
             prv = False
             cur = False
@@ -77,7 +74,7 @@ class Maze:
 
             leftnode = None
 
-            for x in range(1, self.width - 1):
+            for x in range(1, self.__width - 1):
                 prv = cur
                 cur = nxt
                 nxt = self.maze[rowoffset + x + 1] > 0
@@ -136,10 +133,10 @@ class Maze:
 
                     count += 1
 
-        rowoffset = (self.height - 1) * self.width
-        for x in range(1, self.width - 1):
+        rowoffset = (self.__width - 1) * self.__width
+        for x in range(1, self.__width - 1):
             if self.maze[rowoffset + x] > 0:
-                self.end = Maze.Node((x, self.height - 1))
+                self.end = Maze.Node((x, self.__height - 1))
                 t = topnodes[x]
                 t.Neighbours[2] = self.end
                 self.end.Neighbours[0] = t
@@ -147,3 +144,10 @@ class Maze:
                 break
 
         self.count = count
+
+    def info(self):
+        if self.count is None:
+            return
+        print('\n========= Graph Information =========')
+        print('     Number of nodes created: ' + str(self.count))
+        print('=====================================')
