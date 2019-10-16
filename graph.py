@@ -116,9 +116,6 @@ class Graph:
     def solve(self, solver):
         self.__path = solver(self)[0]
 
-    def get_path(self):
-        return self.__path
-
     def size(self):
         return 0 if self.__count is None else self.__count
 
