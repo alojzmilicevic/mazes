@@ -1,13 +1,26 @@
 from image_parser import ImageParser
-from breadthFirst import solve as bf_solve
-from painter import Painter
+from window.Frame import Frame
+from maze import Maze
+from breadthFirst import solve as bf
 
-file_name = "images/8x8.png"
+SIZE = 1024
+
+file_name = "images/w.png"
 parser = ImageParser(file_name)
-maze = parser.get_maze()
+data = parser.parse_image()
+maze = Maze(data, SIZE)
+maze.solve(solver=bf)
 
-parser.info()
-maze.info()
+parser.print_info()
+maze.print_info()
 
-painter = Painter()
-painter.draw(maze)
+
+class Window(Frame):
+    def draw(self):
+        render_target = self.get_render_target()
+        maze.draw(render_target)
+        self.run()
+
+
+window = Window(SIZE)
+window.init()
