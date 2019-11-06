@@ -1,5 +1,6 @@
 #########################################################
 # This class is responsible for parsing the image file  #
+# using PIL we get data of all the pixels in the image  #
 #########################################################
 from PIL import Image
 

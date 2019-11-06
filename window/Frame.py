@@ -1,3 +1,7 @@
+"""
+This class is just a tkinter wrapper to hide some of the work.
+"""
+
 from tkinter import *
 
 
@@ -6,6 +10,7 @@ class Frame:
         self.__size = size
 
         self.__tk = Tk()
+        self.__tk.title('Maze')
         self._canvas = Canvas(self.__tk, width=size, height=size)
         self._canvas.pack()
         self.__tk.bind("<Escape>", self.close)
@@ -26,6 +31,5 @@ class Frame:
     def get_render_target(self):
         return self._canvas
 
-    
     def run(self):
         self.__tk.mainloop()

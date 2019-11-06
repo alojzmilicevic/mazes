@@ -5,7 +5,7 @@ from breadthFirst import solve as bf
 
 SIZE = 1024
 
-file_name = "images/w.png"
+file_name = "images/8x8.png"
 parser = ImageParser(file_name)
 data = parser.parse_image()
 maze = Maze(data, SIZE)

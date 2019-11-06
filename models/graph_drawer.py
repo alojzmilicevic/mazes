@@ -1,3 +1,11 @@
+"""
+This Class is responsible for drawing a graph.
+I didn't want to clutter the graph with rendering so i made this class for it instead.
+
+TODO: Make it so this class receives a vector of absolute coordinates, not relative coordinates like (1,1)
+    this class should not have to care about what it's rendering...
+"""
+
 import time
 
 
@@ -13,6 +21,8 @@ class GraphDrawer:
         self.__graph = graph
         self.__cell_size = cell_size
 
+    # Calculate the slope between two points.
+    # Then draw many small lines between the two points being rendered.
     def draw(self, render_target):
         path = self.__graph.get_path()
         path_length = len(path)

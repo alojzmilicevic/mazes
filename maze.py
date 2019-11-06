@@ -1,3 +1,9 @@
+"""
+This class represents the maze object, and the corresponding graph of that maze.
+It is responsible for drawing the maze and the graph.
+
+TODO: If this class gets too big break out the rendering and put it in a separate component (see graph_drawer)
+"""
 from graph import Graph
 
 

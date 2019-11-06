@@ -1,3 +1,8 @@
+"""
+This class gets a set of data (a vector containing integers (255 or 0)) representing the maze.
+It then creates a graph based on that vector with the points in the maze that make up the path.
+"""
+
 from models.graph_drawer import GraphDrawer
 
 
